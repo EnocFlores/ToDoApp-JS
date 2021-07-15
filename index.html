@@ -36,7 +36,7 @@
     // Finally, set the `input.value` to an empty string.
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log(input.value);
+        // console.log(input.value);   //This is not needed, just here for debugging
         todoMaker(input.value);
         input.value = '';
     });
@@ -59,7 +59,6 @@
             todosList.removeChild(todosList.firstChild);
         }
     });
-
 
   </script> 
 </body>
