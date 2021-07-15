@@ -28,6 +28,26 @@
     var button = document.getElementById('clear');
     var input = document.getElementById('user-todo');
 
+    // Declare variable `todosArray` to hold our todos.
+    // set our `todosArray` to an empty array.
+    
+    //var todosArray = [];
+    var todosArray = localStorage.getItem('todos') ? JSON.parse(localStorage.getItem('todos')) : [];
+
+    // use localStorage setItem() method to set `todos` to a string with `JSON.stringify()`
+      // JSON.stringify() if used because localStorage works with strings. This is how
+      // we sent data to localStorage.
+    localStorage.setItem('todos', JSON.stringify(todosArray));
+
+    // Declare a variable `storage` that contains all the information in localStorage.
+      // We will assign to `storage` JSON.parse() method that converts strings from local
+      // storage into data we can access with JavaScript.
+      // When receiving data from a web server, the data is always a string.
+      //Parse the data with JSON.parse(), and the data becomes a JavaScript object.
+    var storage = JSON.parse(localStorage.getItem('todos'));
+
+
+
     // Step 2 -> attach an event listener to the `form` variable with `addEventListener`
     // to capture the user input on the `submit` event.
     // Make sure to run `preventDefault()` on the event when the form is submitted.
@@ -37,9 +57,19 @@
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         // console.log(input.value);   //This is not needed, just here for debugging
+        
+        // push onto `todosArray` the `input.value`
+        todosArray.push(input.value);
+        
+        // on localStorage now use `setItem()` for the key `'todos'` the value
+          // of the todosArray as a string with the `JSON.stringify()` method.
+        localStorage.setItem('todos', JSON.stringify(todosArray));
+
         todoMaker(input.value);
         input.value = '';
     });
+
+
 
     // Step 3 -> create a todoMaker function that creates 'li' elements with the text user provides
     // from their form and appends it to the 'ul'.
@@ -49,12 +79,23 @@
         todosList.appendChild(todo);
     }
 
+    // Loop through localStorage when a user first opens a page and run the todoMaker function
+    for (var i = 0; i < storage.length; i++) {
+        todoMaker(storage[i]);
+    }
+
+
+
     // Step 4 -> attach an event listener to the `clear all` button listening for
     // a user click.
     // In the function use a while loop checking to see whether there
       // is an li element as a child of the `ul` tag. In the code block use the
       // removeChild() DOM method to removed that `li` using the firstChild property.
     button.addEventListener('click', function() {
+
+        // clear the `localStorage` with the `clear()` method
+        localStorage.clear();
+
         while(todosList.firstChild) {
             todosList.removeChild(todosList.firstChild);
         }
